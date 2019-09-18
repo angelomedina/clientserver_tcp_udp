@@ -9,7 +9,7 @@ def main():
         print('Argument list: '+ str(sys.argv))
 
         #Funtion: arguments of cli file
-        _program  = str(sys.argv[0])  # name of the program for default is client.py
+        _program  = str(sys.argv[0])  # name of the program for default is main.py
         _ip       =  str(sys.argv[1]) # ip tha I want to connect 
         _port     = int(sys.argv[2])  # port than I want to connect 
         _type     = str(sys.argv[3])  # type of proccess than I want to do: -d(download a file), -u(upload a file) and -l(list of files)
