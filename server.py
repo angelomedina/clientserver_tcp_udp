@@ -21,8 +21,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     filepath = 'server-file/'+name
     f = open(filepath, 'rb')
     value = f.read(1024)
-
+    
     while (value):
+        #esta linea no me esta enviando
         conn.send(value)
         print('sent file')
         value = f.read(1024)

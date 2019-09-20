@@ -66,6 +66,7 @@ def uploadTCP(_ip,_port, _file):
 
 def dowloadTCP(_ip,_port, _file):
 
+    #server = socket.socket()
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.connect((_ip, _port))
 
@@ -73,7 +74,7 @@ def dowloadTCP(_ip,_port, _file):
     msg = str.encode(_file, 'utf-8')
     server.send(msg)
 
-    with open(os.path.join('client-file/',_file)) as f:
+    with open(os.path.join('client-file/',_file),'wb') as f:
 
         while True:
             print('file openend')
