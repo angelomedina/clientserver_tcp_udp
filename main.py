@@ -6,7 +6,11 @@ def main():
     
     try:
         
-        print('Argument list: '+ str(sys.argv))
+        if len(sys.argv) != 6:
+            print("usage:", sys.argv[0], "<ip> <port> <type(-d, -u, -l)> <file_name> <protocol(udp or tcp)>")
+            sys.exit(1)
+
+        #print('Argument list: '+ str(sys.argv))
 
         #Funtion: arguments of cli file
         _program  = str(sys.argv[0])  # name of the program for default is main.py
@@ -32,17 +36,24 @@ def UDP():
 
 def TCP(_ip, _port,_type,_file):
     
-    print('TCP funtions')
+    if _type == '-d':
+        dowloadTCP(_ip,_port, _file)
 
-    # open the connection 
-    server = socket.socket()
-    server.connect((_ip, _port))    
+    elif _type == '-u':
+        uploadTCP(_ip,_port, _file)
+        
+    elif _type == '-l':
+        listTCP(_ip,_port, _file)
 
-    #while True:
-        #print('connected')
 
-    server.close()
-    print('connection closed')
+def uploadTCP(_ip,_port, _file):
+    print('upload file')
+
+def dowloadTCP(_ip,_port, _file):
+    print('dowload file')
+
+def listTCP(_ip,_port, _file):
+    print('list file')
 
 if __name__ == '__main__':
     main()
