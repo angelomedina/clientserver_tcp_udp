@@ -45,8 +45,10 @@ def TCP(_ip, _port,_type,_file):
 
 def uploadTCP(_ip,_port, _file):
 
-    server = socket.socket()
-    server.connect((_ip,_port))
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.connect((_ip, _port))
+    #server = socket.socket()
+    #server.connect((_ip,_port))
 
     #sending file
     filetosend = open(_file,'rb')
@@ -66,7 +68,6 @@ def uploadTCP(_ip,_port, _file):
 
 def dowloadTCP(_ip,_port, _file):
 
-    #server = socket.socket()
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.connect((_ip, _port))
 
@@ -90,7 +91,26 @@ def dowloadTCP(_ip,_port, _file):
 
 
 def listTCP(_ip,_port):
-    print('list file')
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.connect((_ip, _port))
+
+    print('lista del archivos del directorio server-file:')
+    while True:
+
+        #recivied the bytes from the server
+        data = server.recv(1024)
+
+        #convert bytes to strig then print whitout format the string
+        directory = str(repr(data))
+        filename = directory[2:len(directory)-1]
+        print(filename)
+        
+        if not data:
+            break
+
+    server.close()
+
 
 if __name__ == '__main__':
     main()
