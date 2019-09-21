@@ -16,7 +16,7 @@ def main():
         _protocol = str(sys.argv[5])  # name of the protocol than I want to use: UPD and TCP
 
         if  _protocol == 'udp':
-            UDP()
+            UDP(_ip,_port,_type,_file)
         elif _protocol == 'tcp':
             TCP(_ip,_port,_type,_file)
         else:
@@ -28,8 +28,10 @@ def main():
             print('Oops usage:', sys.argv[0], "<ip> <port> <type(-d, -u, -l)> <file_path/file_name> <protocol(udp or tcp)>")
             sys.exit(1)
     
-def UDP():
-    print('UDP funtions')
+def UDP(_ip, _port,_type,_file):
+    
+    if _type == '-l':
+        listUDP(_ip,_port)
 
 def TCP(_ip, _port,_type,_file):
     
@@ -116,6 +118,31 @@ def listTCP(_ip,_port):
             break
 
     server.close()
+
+def listUDP(_ip, _port):
+
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    print('lista del archivos del directorio server-file:')
+
+    #send data to establish the connection
+    client.sendto(b'', (_ip,_port))
+
+    while True:
+
+        #recivied the bytes from the server
+        data,_server = client.recvfrom(1024)
+
+        #convert bytes to strig then print whitout format the string
+        directory = str(repr(data))
+        filename = directory[2:len(directory)-1]
+        print(filename)
+    
+    client.close()
+
+
+
+    
 
 
 if __name__ == '__main__':
