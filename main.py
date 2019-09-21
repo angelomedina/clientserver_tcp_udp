@@ -47,11 +47,17 @@ def uploadTCP(_ip,_port, _file):
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.connect((_ip, _port))
-    #server = socket.socket()
-    #server.connect((_ip,_port))
+   
+    #sending file name to save this udload file with the same name
+    filename = str.encode(_file, 'utf-8')
+    server.send(filename)
 
-    #sending file
-    filetosend = open(_file,'rb')
+    try:
+        filetosend = open(os.path.join('client-file/',_file),'rb')
+
+    except (OSError, IOError) as e:
+        print(e)
+    
     data = filetosend.read(1024)
 
     while data:
@@ -72,8 +78,8 @@ def dowloadTCP(_ip,_port, _file):
     server.connect((_ip, _port))
 
     #convert the _file a b'text' that why I need to send a format with b''
-    msg = str.encode(_file, 'utf-8')
-    server.send(msg)
+    filename = str.encode(_file, 'utf-8')
+    server.send(filename)
 
     with open(os.path.join('client-file/',_file),'wb') as f:
 
