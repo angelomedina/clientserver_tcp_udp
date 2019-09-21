@@ -30,12 +30,15 @@ def main():
     
 def UDP(_ip, _port,_type,_file):
 
+    if _type == '-l':
+        listUDP(_ip,_port)
+    
+    if _type == '-u':
+        uploadUDP(_ip,_port,_file)
+
     if _type == '-d':
         dowloaUDP(_ip,_port,_file)
     
-    if _type == '-l':
-        listUDP(_ip,_port)
-
 def TCP(_ip, _port,_type,_file):
     
     if _type == '-d':
@@ -146,8 +149,6 @@ def listUDP(_ip, _port):
 
 def dowloaUDP(_ip,_port, _file):
 
-    print(_file)
-
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     #convert the _file a b'text' that why I need to send a format with b''
@@ -161,8 +162,6 @@ def dowloaUDP(_ip,_port, _file):
 
             data, _server = client.recvfrom(1024)
 
-            print(data)
-
             if not data:
                 break
             f.write(data)
@@ -170,6 +169,34 @@ def dowloaUDP(_ip,_port, _file):
 
     f.write()
     socket.close()
+
+def uploadUDP(_ip,_port,_file):
+    
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    #sending file name to save this udload file with the same name
+    filename = str.encode('client.png', 'utf-8')
+    client.sendto(filename,(_ip,_port))
+
+    try:
+        filetosend = open(os.path.join('client-file/','client.png'),'rb')
+
+    except (OSError, IOError) as e:
+        print(e)
+
+    data = filetosend.read(1024)
+    
+    while (data):
+        print('uploading file')
+        client.sendto(data, ('127.0.0.1',5004))
+        data = filetosend.read(1024)
+
+    filetosend.close()
+    print('done sending...')
+    client.shutdown(2)
+    client.close()
+
+
 
 
 if __name__ == '__main__':

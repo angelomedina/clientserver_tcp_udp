@@ -52,7 +52,7 @@ def appupload_tcp():
         name = filename[2:len(filename)-1]
         filepath = 'server-file/'+name
         
-        #connetion to wite a file
+        #connetion to write a file
         filetodown = open(filepath,'wb')
 
         print('connected by ',addr)
@@ -172,6 +172,51 @@ def appdownload_udp():
             f.close()
             print('sent file finished')
 
+def appupload_udp():
+
+    #python main.py 127.0.0.1 5004 -u client.png udp
+
+    port = 5004
+    host = '127.0.0.1'
+
+    print('server -u listening udp: '+ host +' '+str(port))
+
+    # socket.AF_INET: means protocol IPv4
+    # socket.SOCK_DGRAM: used for UDP
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.bind((host,port))
+
+        #recived the file name
+        data, address = s.recvfrom(1024)
+
+        #convert this file to string the make a file path 
+        filename = str(repr(data))
+        name = filename[2:len(filename)-1]
+        filepath = 'server-file/'+name
+
+        #connetion to write a file
+        filetodown = open(filepath,'wb')
+
+        print('connected by ',address)
+
+        while True:
+
+            print('receiving...')
+            data, address = s.recvfrom(1024)
+            filetodown.write(data)
+
+            if len(data) < 1024:
+                print('done reciving')
+                break
+        
+        filetodown.close()
+        #conn.send(str.encode('file saved in server-file'))
+        s.shutdown(2)
+        s.close()
+        print('connection closet')
+        
+
+
 
 
 
@@ -183,12 +228,14 @@ if __name__=='__main__':
     t2 = threading.Thread(target = appupload_tcp)
     t3 = threading.Thread(target = appdownload_tcp)
     t4 = threading.Thread(target = applist_udp)
+    t5 = threading.Thread(target = appupload_udp)
     t6 = threading.Thread(target = appdownload_udp)
 
     t1.start()
     t2.start()
     t3.start()
     t4.start()
+    t5.start()
     t6.start()
 
 
