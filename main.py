@@ -29,6 +29,9 @@ def main():
             sys.exit(1)
     
 def UDP(_ip, _port,_type,_file):
+
+    if _type == '-d':
+        dowloaUDP(_ip,_port,_file)
     
     if _type == '-l':
         listUDP(_ip,_port)
@@ -79,10 +82,11 @@ def dowloadTCP(_ip,_port, _file):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.connect((_ip, _port))
 
-    #convert the _file a b'text' that why I need to send a format with b''
+    #convert the _file a b'text' that why I need to send a format without b''
     filename = str.encode(_file, 'utf-8')
     server.send(filename)
 
+    #save the file in this directory
     with open(os.path.join('client-file/',_file),'wb') as f:
 
         while True:
@@ -140,9 +144,32 @@ def listUDP(_ip, _port):
     
     client.close()
 
+def dowloaUDP(_ip,_port, _file):
 
+    print(_file)
 
-    
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    #convert the _file a b'text' that why I need to send a format with b''
+    filename = str.encode(_file, 'utf-8')
+    client.sendto(filename, (_ip, _port))
+
+    #save the file in this directory
+    with open(os.path.join('client-file/',_file),'wb') as f:
+
+        while True:
+
+            data, _server = client.recvfrom(1024)
+
+            print(data)
+
+            if not data:
+                break
+            f.write(data)
+            print('file saved in: client-file/your-file-name')
+
+    f.write()
+    socket.close()
 
 
 if __name__ == '__main__':

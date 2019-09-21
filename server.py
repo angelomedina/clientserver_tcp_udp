@@ -111,6 +111,8 @@ def appdownload_tcp():
     
 def applist_udp():
     
+    #python main.py 127.0.0.1 5003 -l writeenyone udp
+
     port = 5003
     host = '127.0.0.1'
 
@@ -136,19 +138,58 @@ def applist_udp():
                 print(filename)
                 s.sendto(filename, address)
     
-    
+def appdownload_udp():
+
+    #python main.py 127.0.0.1 5005 -d server.png udp
+
+    port = 5005
+    host = '127.0.0.1'
+
+    print('server -d listening udp: '+ host +' '+str(port))
+
+    # socket.AF_INET: means protocol IPv4
+    # socket.SOCK_DGRAM: used for UDP
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.bind((host,port))
+
+        while True:
+
+            data, address = s.recvfrom(1024)
+            print('connected by ',address)
+
+            #convert the response to string; then concat the path and the filename(name)
+            filename = str(repr(data))
+            name = filename[2:len(filename)-1]
+
+            filepath = 'server-file/'+name
+            f = open(filepath, 'rb')
+            value = f.read(1024)
+
+            while (value):
+                s.sendto(value, address)
+                print('sent file')
+                value = f.read(1024)
+            f.close()
+            print('sent file finished')
+
+
+
+
     
 
 if __name__=='__main__':
+
     t1 = threading.Thread(target = applist_tcp)
     t2 = threading.Thread(target = appupload_tcp)
     t3 = threading.Thread(target = appdownload_tcp)
     t4 = threading.Thread(target = applist_udp)
+    t6 = threading.Thread(target = appdownload_udp)
 
     t1.start()
     t2.start()
     t3.start()
     t4.start()
+    t6.start()
 
 
 

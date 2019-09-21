@@ -1,32 +1,26 @@
-import socket,time,traceback
+import socket
+import os
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-print('lista del archivos del directorio server-file:')
+#convert the _file a b'text' that why I need to send a format without b''
+filename = str.encode('server.png', 'utf-8')
+client.sendto(filename, ('127.0.0.1', 5004))
 
-#send data:
-client.sendto(b'test', ('127.0.0.1',5003))
-data, server = client.recvfrom(1024)
+#save the file in this directory
+with open(os.path.join('client-file/','server.png'),'wb') as f:
 
-while True:
-        
-    #recivied the bytes from the server
-    data, server = client.recvfrom(1024)
+    while True:
 
-    #convert bytes to strig then print whitout format the string
-    directory = str(repr(data))
-    filename = directory[2:len(directory)-1]
-    print(filename)    
-    
-#client.close()
-        
-    
+        data, server = client.recvfrom(1024)
 
+        if not data:
+            break
+        f.write(data)
+        print('file saved in: client-file/your-file-name')
 
-        
-
-
-
+f.write()
+socket.close()
 
 
 """
