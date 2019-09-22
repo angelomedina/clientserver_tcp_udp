@@ -2,6 +2,7 @@ import sys
 import socket
 import os
 
+#commint: configure with Jenkins
 
 def main():
     
