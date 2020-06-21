@@ -38,7 +38,7 @@ def UDP(_ip, _port,_type,_file):
         uploadUDP(_ip,_port,_file)
 
     if _type == '-d':
-        dowloaUDP(_ip,_port,_file)
+        dowloadUDP(_ip,_port,_file)
     
 def TCP(_ip, _port,_type,_file):
     
@@ -148,7 +148,7 @@ def listUDP(_ip, _port):
     
     client.close()
 
-def dowloaUDP(_ip,_port, _file):
+def dowloadUDP(_ip,_port, _file):
 
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
